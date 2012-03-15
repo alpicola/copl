@@ -2,7 +2,7 @@
 open Parser
 }
 
-let space = [' ' '\t' '\n' 'r']
+let space = [' ' '\t' '\n' '\r']
 let digit = ['0'-'9']
 let alpha = ['A'-'Z' 'a'-'z' '_']
 

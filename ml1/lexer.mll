@@ -2,7 +2,7 @@
 open Parser
 }
 
-let space = [' ' '\t' '\n' 'r']
+let space = [' ' '\t' '\n' '\r']
 let digit = ['0'-'9']
 
 rule token = parse
