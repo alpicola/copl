@@ -15,12 +15,19 @@ let apply_op o v1 v2 = match o, v1, v2 with
   | Lt, IntVal i1, IntVal i2 -> BoolVal (i1 < i2)
   | _, _, _ -> failwith "type error"
 
-let rec eval = function
+let rec resolve id = function
+  | (i, v) :: _ when i = id -> v
+  | _ :: e -> resolve id e
+  | _ -> failwith "variable resolve error"
+
+let rec eval env = function
   | IntLit i -> IntVal i
   | BoolLit b -> BoolVal b
-  | Op (o, e1, e2) -> apply_op o (eval e1) (eval e2)
+  | Var id -> resolve id env
+  | Op (o, e1, e2) -> apply_op o (eval env e1) (eval env e2)
+  | Let (id, e1, e2) -> eval ((id, eval env e1) :: env) e2
   | If (e1, e2, e3) ->
-      (match eval e1 with
-        | BoolVal true  -> eval e2
-        | BoolVal false -> eval e3
+      (match eval env e1 with
+        | BoolVal true  -> eval env e2
+        | BoolVal false -> eval env e3
         | _ -> failwith "type error")

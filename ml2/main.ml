@@ -10,7 +10,7 @@ let _ =
       let input = read_line () in
       try 
         print_string "=> ";
-        print_endline (string_of_val (eval (parse input)))
+        print_endline (string_of_val (eval [] (parse input)))
       with
         | Parsing.Parse_error ->
             print_endline "syntax error"
