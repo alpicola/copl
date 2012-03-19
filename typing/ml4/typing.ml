@@ -56,11 +56,8 @@ let rec unify = function
   | (TyInt, TyInt) :: eqs -> unify eqs 
   | (TyBool, TyBool) :: eqs -> unify eqs
   | (TyVar n1, TyVar n2) :: eqs when n1 = n2 -> unify eqs
-  | (TyVar n, t) :: eqs when not (IntSet.mem n (free_tyvar t)) ->
-      let sub = substitute [(n, t)] in 
-      let s = unify (List.map (fun (t1, t2) -> (sub t1, sub t2)) eqs) in
-      (n, substitute s t) :: s
-  | (t, TyVar n) :: eqs when not (IntSet.mem n (free_tyvar t)) ->
+  | ((TyVar n, t) | (t, TyVar n)) :: eqs
+    when not (IntSet.mem n (free_tyvar t)) ->
       let sub = substitute [(n, t)] in 
       let s = unify (List.map (fun (t1, t2) -> (sub t1, sub t2)) eqs) in
       (n, substitute s t) :: s
