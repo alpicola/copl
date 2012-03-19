@@ -1,0 +1,5 @@
+|- fun x -> fun y -> x : bool -> int -> bool by T-Fun {
+    x : bool |- fun y -> x : int -> bool by T-Fun {
+        x : bool, y : int |- x : bool by T-Var {}
+    }
+}

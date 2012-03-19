@@ -4,3 +4,8 @@
 *.omc
 *.opt
 .omakedb*
+main
+lexer.ml
+parser.ml
+parser.mli
+parser.output

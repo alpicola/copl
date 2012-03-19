@@ -1,0 +1,26 @@
+|- let twice = fun f -> fun x -> f (f x) in
+   twice (fun x -> x + 4) 5 : int by T-Let {
+    |- fun f -> fun x -> f (f x) : ('a -> 'a) -> 'a -> 'a  by T-Abs {
+        f : 'a -> 'a |- fun x -> f (f x) : 'a -> 'a by T-Abs {
+            f : 'a -> 'a, x : 'a |- f (f x) : 'a by T-App {
+                f : 'a -> 'a, x : 'a |- f : 'a -> 'a by T-Var {};
+                f : 'a -> 'a, x : 'a |- f x : 'a by T-App {
+                    f : 'a -> 'a, x : 'a |- f : 'a -> 'a by T-Var {};
+                    f : 'a -> 'a, x : 'a |- x : 'a by T-Var {}
+                }
+            }
+        }
+    };
+    twice : 'a . ('a -> 'a) -> 'a -> 'a |- twice (fun x -> x + 4) 5 : int by T-App {
+        twice : 'a . ('a -> 'a) -> 'a -> 'a |- twice (fun x -> x + 4) : int -> int by T-App {
+            twice : 'a . ('a -> 'a) -> 'a -> 'a |- twice : (int -> int) -> (int -> int) by T-Var {};
+            twice : 'a . ('a -> 'a) -> 'a -> 'a |- fun x -> x + 4 : int -> int by T-Abs {
+                twice : 'a . ('a -> 'a) -> 'a -> 'a, x : int |- x + 4 : int by T-Plus {
+                    twice : 'a . ('a -> 'a) -> 'a -> 'a, x : int |- x : int by T-Var {};
+                    twice : 'a . ('a -> 'a) -> 'a -> 'a, x : int |- 4 : int by T-Int {}
+                }
+            }
+        };
+        twice : 'a . ('a -> 'a) -> 'a -> 'a |- 5 : int by T-Int {}
+    }
+}

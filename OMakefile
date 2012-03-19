@@ -1,1 +1,1 @@
-.SUBDIRS: ml1 ml2
+.SUBDIRS: eval typing
