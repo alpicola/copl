@@ -34,8 +34,7 @@ let string_of_ty t =
         if p then "(" ^ s ^ ")" else s in
   iter false t
 
-let eqs_of_subst s = 
-  List.map (fun (n, t) -> (TyVar n, t)) s
+let eqs_of_subst s = List.map (fun (n, t) -> (TyVar n, t)) s
 
 let mono_ty t = (IntSet.empty, t)
 
@@ -45,17 +44,14 @@ let poly_ty t env =
   (IntSet.diff (free_tyvar t) vs, t)
 
 let rec substitute s = function
-  | TyInt -> TyInt
-  | TyBool -> TyBool
+  | TyInt | TyBool as t -> t
   | TyVar n -> (try List.assoc n s with Not_found -> TyVar n)
   | TyList t ->  TyList (substitute s t)
   | TyFun (t1, t2) -> TyFun (substitute s t1, substitute s t2)
 
 let rec unify = function
   | [] -> []
-  | (TyInt, TyInt) :: eqs -> unify eqs 
-  | (TyBool, TyBool) :: eqs -> unify eqs
-  | (TyVar n1, TyVar n2) :: eqs when n1 = n2 -> unify eqs
+  | (t1, t2) :: eqs when t1 = t2 -> unify eqs 
   | ((TyVar n, t) | (t, TyVar n)) :: eqs
     when not (IntSet.mem n (free_tyvar t)) ->
       let sub = substitute [(n, t)] in 
